@@ -16,18 +16,20 @@ def get_box_infos(annotations,label_dict):
                 x2 = box_anno["box2d"]["x2"]
                 y2 = box_anno["box2d"]["y2"]
                 box_info += " %s,%s,%s,%s,%s" % (x1,y1,x2,y2,label_id)
+        box_info += "\n"
         box_infos.append(box_info)
     return box_infos
 
 def write_file(box_infos,filepath):
     with open(filepath,"w") as file:
-        
-
-annotations = utils.load_annotation(config.TTRAIN_LABEL_FILE)
-
-box_info = ""
+        file.writelines(box_infos)
 
 
+label_dict = {}
+for i,label in enumerate(config.LABEL_NAME):
+    label_dict[label] = i
+annotations = utils.load_annotation(config.VALID_LABEL_FILE)
 
+box_infos = get_box_infos(annotations,label_dict)
 
-
+write_file(box_infos,"./val.txt")
